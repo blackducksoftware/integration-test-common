@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>integration-test-common</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <name>Integration Test Common</name>
   <description>General test code for Integrations with Black Duck Software products</description>
