@@ -10,7 +10,6 @@ The integration-test-common library supplies shared utilities across many integr
 You can download the latest release from Maven Central.
 
 ## Documentation ##
-All documentation for integration-test-common can be found on the base project:  https://github.com/blackducksoftware/integration-test-common/wiki
 
 ## License ##
 Apache License 2.0
