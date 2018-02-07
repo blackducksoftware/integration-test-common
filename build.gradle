@@ -21,23 +21,3 @@ dependencies {
     testCompile 'org.slf4j:slf4j-api:1.7.25'
     testCompile 'org.skyscreamer:jsonassert:1.5.0'
 }
-
-def tasksPackages = [
-    'testIntegration' : 'com.blackducksoftware.integration.test.annotation.IntegrationTest',
-    'testDatabaseConnection' : 'com.blackducksoftware.integration.test.annotation.DatabaseConnectionTest',
-    'testExternalConncetion' : 'com.blackducksoftware.integration.test.annotation.ExternalConnectionTest',
-    'testHubConnection' : 'com.blackducksoftware.integration.test.annotation.HubConnectionTest',
-    'testPerformance' : 'com.blackducksoftware.integration.test.annotation.PerformanceTest'
-]
-    
-test {
-    useJUnit {
-        excludeCategories = tasksPackages.values()
-    }
-}
-
-tasksPackages.each { taskName, packageName ->
-    task "$taskName"(type: Test) {
-        useJUnit { includeCategories packageName }
-    }
-}

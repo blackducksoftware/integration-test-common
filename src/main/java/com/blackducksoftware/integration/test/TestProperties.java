@@ -29,7 +29,7 @@ import org.junit.Assume;
 
 public class TestProperties {
     private final TestResourceLoader resourceLoader;
-    private final Properties properties;
+    private Properties properties;
 
     public TestProperties() {
         this(TestResourceLoader.DEFAULT_PROPERTIES_FILE_LOCATION);
@@ -37,7 +37,7 @@ public class TestProperties {
 
     public TestProperties(final String propertiesLocation) {
         resourceLoader = new TestResourceLoader();
-        properties = generateProperties(propertiesLocation);
+        generateProperties(propertiesLocation);
     }
 
     public Properties getProperties() {
@@ -84,8 +84,7 @@ public class TestProperties {
         return properties.containsKey(propertyKey);
     }
 
-    private Properties generateProperties(final String propertiesLocation) {
-        Properties properties = new Properties();
+    private void generateProperties(final String propertiesLocation) {
         try {
             properties = resourceLoader.loadProperties(propertiesLocation);
             if (isEmpty()) {
@@ -96,8 +95,6 @@ public class TestProperties {
             System.out.println("Reading from the environment...");
             populatePropertiesFromEnv();
         }
-
-        return properties;
     }
 
     private void populatePropertiesFromEnv() {
