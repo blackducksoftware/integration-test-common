@@ -8,7 +8,8 @@ buildscript {
     dependencies { classpath 'com.blackducksoftware.integration:common-gradle-plugin:0.0.+' }
 }
 
-version = '0.0.1-SNAPSHOT'
+group = 'com.blackducksoftware.integration'
+version = '2.0.0-SNAPSHOT'
 
 apply plugin: 'com.blackducksoftware.integration.library'
 
