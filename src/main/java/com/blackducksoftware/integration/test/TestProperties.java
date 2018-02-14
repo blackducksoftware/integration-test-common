@@ -50,8 +50,7 @@ public class TestProperties {
 
     public String getAndAssumeProperty(final TestPropertyKey propertyKey) {
         final String propertyKeyName = propertyKey.name();
-        assumeTrue(propertyKeyName);
-        return getProperty(propertyKeyName);
+        return getAndAssumeProperty(propertyKeyName);
     }
 
     public String getAndAssumeProperty(final String propertyKey) {
