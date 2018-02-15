@@ -32,39 +32,34 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.blackducksoftware.integration.log.IntLogger;
 import com.blackducksoftware.integration.log.LogLevel;
-import com.google.common.collect.EvictingQueue;
 
 public class TestLogger extends IntLogger {
     public static final int DEFAULT_LOG_SIZE = 1000;
 
     private LogLevel logLevel = LogLevel.TRACE;
 
-    private final EvictingQueue<String> outputQueue;
-    private final EvictingQueue<Throwable> errorQueue;
+    private final List<String> outputList;
+    private final List<Throwable> errorList;
 
     public TestLogger() {
-        this(DEFAULT_LOG_SIZE);
+        outputList = new ArrayList<>();
+        errorList = new ArrayList<>();
     }
 
-    public TestLogger(final int listSize) {
-        outputQueue = EvictingQueue.create(listSize);
-        errorQueue = EvictingQueue.create(listSize);
+    public List<String> getOutputList() {
+        return outputList;
     }
 
-    public EvictingQueue<String> getOutputQueue() {
-        return outputQueue;
-    }
-
-    public EvictingQueue<Throwable> getErrorQueue() {
-        return errorQueue;
+    public List<Throwable> getErrorList() {
+        return errorList;
     }
 
     public void resetOutputList() {
-        outputQueue.clear();
+        outputList.clear();
     }
 
     public void resetErrorList() {
-        errorQueue.clear();
+        errorList.clear();
     }
 
     public void resetAllOutput() {
@@ -73,53 +68,53 @@ public class TestLogger extends IntLogger {
     }
 
     public String getOutputString() {
-        return StringUtils.join(outputQueue, System.getProperty("line.separator"));
+        return StringUtils.join(outputList, System.lineSeparator());
     }
 
     public String getErrorOutputString() {
-        if (errorQueue == null || errorQueue.isEmpty()) {
+        if (errorList == null || errorList.isEmpty()) {
             return "";
         }
 
         final List<String> stackTraces = new ArrayList<>();
-        for (final Throwable e : errorQueue) {
+        for (final Throwable e : errorList) {
             final StringWriter stringWriter = new StringWriter();
             e.printStackTrace(new PrintWriter(stringWriter));
             stackTraces.add(stringWriter.toString());
         }
 
-        return StringUtils.join(stackTraces, System.getProperty("line.separator"));
+        return StringUtils.join(stackTraces, System.lineSeparator());
     }
 
     @Override
     public void alwaysLog(final String txt) {
         System.out.println(String.format("always log: %s", txt));
-        outputQueue.add(txt);
+        outputList.add(txt);
     }
 
     @Override
     public void debug(final String txt) {
         System.out.println(String.format("debug: %s", txt));
-        outputQueue.add(txt);
+        outputList.add(txt);
     }
 
     @Override
     public void debug(final String txt, final Throwable e) {
         debug(txt);
         System.out.println(String.format("exception: %s", e.getMessage()));
-        errorQueue.add(e);
+        errorList.add(e);
     }
 
     @Override
     public void error(final Throwable e) {
         System.out.println(String.format("error: exception: %s", e.getMessage()));
-        errorQueue.add(e);
+        errorList.add(e);
     }
 
     @Override
     public void error(final String txt) {
         System.out.println(String.format("error: %s", txt));
-        outputQueue.add(txt);
+        outputList.add(txt);
     }
 
     @Override
@@ -131,24 +126,24 @@ public class TestLogger extends IntLogger {
     @Override
     public void info(final String txt) {
         System.out.println(String.format("info: %s", txt));
-        outputQueue.add(txt);
+        outputList.add(txt);
     }
 
     @Override
     public void trace(final String txt) {
-        outputQueue.add(txt);
+        outputList.add(txt);
     }
 
     @Override
     public void trace(final String txt, final Throwable e) {
         trace(txt);
-        errorQueue.add(e);
+        errorList.add(e);
     }
 
     @Override
     public void warn(final String txt) {
         System.out.println(String.format("warn: %s", txt));
-        outputQueue.add(txt);
+        outputList.add(txt);
     }
 
     @Override

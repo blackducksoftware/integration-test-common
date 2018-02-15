@@ -8,14 +8,13 @@ buildscript {
     dependencies { classpath 'com.blackducksoftware.integration:common-gradle-plugin:0.0.+' }
 }
 
-version = '2.0.2-SNAPSHOT'
+version = '3.0.0-SNAPSHOT'
 
 apply plugin: 'com.blackducksoftware.integration.library'
 
 dependencies {
     compile 'com.blackducksoftware.integration:integration-common:9.1.0'
     compile 'junit:junit:4.12'
-    compile 'com.google.guava:guava:24.0-jre'
 
     testCompile 'org.slf4j:slf4j-simple:1.7.25'
     testCompile 'org.slf4j:slf4j-api:1.7.25'
