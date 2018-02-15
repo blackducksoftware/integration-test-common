@@ -9,14 +9,14 @@ public class TestLoggerTest {
 
     @Test
     public void testOutputLogger() {
-        final TestLogger testLogger = new TestLogger(1);
+        final TestLogger testLogger = new TestLogger();
 
         testLogger.info("First");
         testLogger.info("Second");
         testLogger.info("Third");
 
-        assertEquals(1, testLogger.getOutputQueue().size());
-        assertEquals("Third", testLogger.getOutputString());
+        assertEquals(3, testLogger.getOutputList().size());
+        assertEquals("First\nSecond\nThird", testLogger.getOutputString());
     }
 
     @Test
