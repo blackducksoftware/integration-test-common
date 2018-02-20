@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TestCategories {
-
     public Map<String, String> getTestTasksAndPackages() {
         final Map<String, String> testTasksAndPackages = new HashMap<>();
         testTasksAndPackages.put("testIntegration", "com.blackducksoftware.integration.test.annotation.IntegrationTest");
@@ -37,4 +36,5 @@ public class TestCategories {
         testTasksAndPackages.put("testPerformance", "com.blackducksoftware.integration.test.annotation.PerformanceTest");
         return testTasksAndPackages;
     }
+
 }
