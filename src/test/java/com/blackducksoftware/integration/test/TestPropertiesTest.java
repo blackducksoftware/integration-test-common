@@ -11,7 +11,7 @@ public class TestPropertiesTest {
 
     @Test
     public void testNewTestPropertiesName() {
-        final TestProperties testProperties = new TestProperties(CUSTOM_TEST_PROPERTIES);
+        final TestProperties testProperties = new TestProperties(CUSTOM_TEST_PROPERTIES, TestPropertyKey.values());
 
         final String test1 = testProperties.getProperty("test");
         final String test2 = testProperties.getProperty("test2");
@@ -28,7 +28,7 @@ public class TestPropertiesTest {
 
     @Test
     public void testPropertyUtilMethods() {
-        final TestProperties testProperties = new TestProperties(CUSTOM_TEST_PROPERTIES);
+        final TestProperties testProperties = new TestProperties(CUSTOM_TEST_PROPERTIES, TestPropertyKey.values());
 
         assertFalse(testProperties.isEmpty());
         assertFalse(testProperties.containsKey("empty"));
@@ -38,12 +38,12 @@ public class TestPropertiesTest {
 
     @Test
     public void testEmptyTestPropertyFile() {
-        final TestProperties testProperties = new TestProperties("empty.properties");
+        final TestProperties testProperties = new TestProperties("empty.properties", TestPropertyKey.values());
 
         assertTrue(testProperties.isEmpty());
 
-        final TestProperties testPropertiesFull = new TestProperties(CUSTOM_TEST_PROPERTIES);
-        
+        final TestProperties testPropertiesFull = new TestProperties(CUSTOM_TEST_PROPERTIES, TestPropertyKey.values());
+
         assertFalse(testPropertiesFull.isEmpty());
         assertEquals("1", testPropertiesFull.getProperty("test"));
     }

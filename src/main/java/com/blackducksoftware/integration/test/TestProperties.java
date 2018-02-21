@@ -32,12 +32,20 @@ public class TestProperties {
     private Properties properties;
 
     public TestProperties() {
-        this(TestResourceLoader.DEFAULT_PROPERTIES_FILE_LOCATION);
+        this(TestPropertyKey.values());
+    }
+
+    public TestProperties(final Enum<?>[] enumValues) {
+        this(TestResourceLoader.DEFAULT_PROPERTIES_FILE_LOCATION, enumValues);
     }
 
     public TestProperties(final String propertiesLocation) {
+        this(propertiesLocation, TestPropertyKey.values());
+    }
+
+    public TestProperties(final String propertiesLocation, final Enum<?>[] enumValues) {
         resourceLoader = new TestResourceLoader();
-        generateProperties(propertiesLocation);
+        generateProperties(propertiesLocation, enumValues);
     }
 
     public Properties getProperties() {
@@ -48,8 +56,8 @@ public class TestProperties {
         return properties == null || properties.isEmpty();
     }
 
-    public String getAndAssumeProperty(final TestPropertyKey propertyKey) {
-        final String propertyKeyName = propertyKey.name();
+    public String getAndAssumeProperty(final PropertyKey propertyKey) {
+        final String propertyKeyName = propertyKey.getEnumName();
         return getAndAssumeProperty(propertyKeyName);
     }
 
@@ -58,8 +66,8 @@ public class TestProperties {
         return getProperty(propertyKey);
     }
 
-    public String getProperty(final TestPropertyKey propertyKey) {
-        String property = properties.getProperty(propertyKey.name());
+    public String getProperty(final PropertyKey propertyKey) {
+        String property = properties.getProperty(propertyKey.getEnumName());
         if (property == null) {
             property = getProperty(propertyKey.getPropertyName());
         }
@@ -75,32 +83,33 @@ public class TestProperties {
         Assume.assumeTrue(containsKey(propertyKey));
     }
 
-    public boolean containsKey(final TestPropertyKey propertyKey) {
-        return containsKey(propertyKey.getPropertyName()) || containsKey(propertyKey.name());
+    public boolean containsKey(final PropertyKey propertyKey) {
+        return containsKey(propertyKey.getPropertyName()) || containsKey(propertyKey.getEnumName());
     }
 
     public boolean containsKey(final String propertyKey) {
         return properties.containsKey(propertyKey);
     }
 
-    private void generateProperties(final String propertiesLocation) {
+    private void generateProperties(final String propertiesLocation, final Enum<?>[] enumValues) {
         try {
             properties = resourceLoader.loadProperties(propertiesLocation);
             if (isEmpty()) {
-                populatePropertiesFromEnv();
+                populatePropertiesFromEnv(enumValues);
             }
         } catch (final Exception ex) {
             System.out.println("Couldn't load the " + propertiesLocation + " file!");
             System.out.println("Reading from the environment...");
-            populatePropertiesFromEnv();
+            populatePropertiesFromEnv(enumValues);
         }
     }
 
-    private void populatePropertiesFromEnv() {
-        for (final TestPropertyKey key : TestPropertyKey.values()) {
-            final String prop = System.getenv(key.name());
+    private void populatePropertiesFromEnv(final Enum<?>[] enumValues) {
+        for (final Enum<?> key : enumValues) {
+            final PropertyKey propertyKey = PropertyKey.class.cast(key);
+            final String prop = System.getenv(propertyKey.getEnumName());
             if (prop != null && !prop.isEmpty()) {
-                properties.put(key.getPropertyName(), prop);
+                properties.put(propertyKey.getPropertyName(), prop);
             }
         }
     }
