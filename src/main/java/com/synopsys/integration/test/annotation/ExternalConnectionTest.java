@@ -21,26 +21,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackducksoftware.integration.test;
+package com.synopsys.integration.test.annotation;
 
-public enum TestPropertyKey {
-    TEST_HUB_SERVER_URL("blackduck.hub.url"),
-    TEST_HUB_PORT("blackduck.hub.port"),
-    TEST_USERNAME("blackduck.hub.username"),
-    TEST_PASSWORD("blackduck.hub.password"),
-    TEST_HUB_API_KEY("blackduck.hub.api.key"),
-    TEST_TRUST_HTTPS_CERT("blackduck.hub.trust.cert"),
-    TEST_HUB_TIMEOUT("blackduck.hub.timeout"),
-    TEST_ACTIVE_USER("blackduck.hub.active.user"),
-    TEST_INACTIVE_USER("blackduck.hub.inactive.user");
+public interface ExternalConnectionTest extends IntegrationTest {
 
-    private String propertyName;
-
-    TestPropertyKey(final String propertyName) {
-        this.propertyName = propertyName;
-    }
-
-    public String getPropertyName() {
-        return propertyName;
-    }
 }

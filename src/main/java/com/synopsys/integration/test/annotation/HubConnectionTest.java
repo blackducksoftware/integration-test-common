@@ -21,8 +21,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackducksoftware.integration.test.annotation;
+package com.synopsys.integration.test.annotation;
 
-public interface DatabaseConnectionTest extends IntegrationTest {
+public interface HubConnectionTest extends IntegrationTest {
 
 }

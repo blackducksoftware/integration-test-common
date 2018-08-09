@@ -1,4 +1,4 @@
-package com.blackducksoftware.integration.test.tool;
+package com.synopsys.integration.test.tool;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

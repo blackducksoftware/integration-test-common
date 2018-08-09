@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackducksoftware.integration.test;
+package com.synopsys.integration.test;
 
 import java.io.BufferedReader;
 import java.io.File;

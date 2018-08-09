@@ -1,4 +1,4 @@
-package com.blackducksoftware.integration.test.annotation;
+package com.synopsys.integration.test.annotation;
 
 import static org.junit.Assert.assertTrue;
 

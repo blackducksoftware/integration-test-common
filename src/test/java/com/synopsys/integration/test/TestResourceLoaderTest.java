@@ -1,4 +1,4 @@
-package com.blackducksoftware.integration.test;
+package com.synopsys.integration.test;
 
 import java.io.IOException;
 

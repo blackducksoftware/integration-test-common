@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackducksoftware.integration.test.tool;
+package com.synopsys.integration.test.tool;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

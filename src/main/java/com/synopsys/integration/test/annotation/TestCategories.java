@@ -21,8 +21,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackducksoftware.integration.test.annotation;
+package com.synopsys.integration.test.annotation;
 
-public interface PerformanceTest extends IntegrationTest {
+import java.util.HashMap;
+import java.util.Map;
+
+public class TestCategories {
+    public Map<String, String> getTestTasksAndPackages() {
+        final Map<String, String> testTasksAndPackages = new HashMap<>();
+        testTasksAndPackages.put("testIntegration", "com.synopsys.integration.test.annotation.IntegrationTest");
+        testTasksAndPackages.put("testDatabaseConnection", "com.synopsys.integration.test.annotation.DatabaseConnectionTest");
+        testTasksAndPackages.put("testExternalConnection", "com.synopsys.integration.test.annotation.ExternalConnectionTest");
+        testTasksAndPackages.put("testHubConnection", "com.synopsys.integration.test.annotation.HubConnectionTest");
+        testTasksAndPackages.put("testPerformance", "com.synopsys.integration.test.annotation.PerformanceTest");
+        return testTasksAndPackages;
+    }
 
 }

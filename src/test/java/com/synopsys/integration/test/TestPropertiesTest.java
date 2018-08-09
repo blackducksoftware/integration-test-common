@@ -1,8 +1,6 @@
-package com.blackducksoftware.integration.test;
+package com.synopsys.integration.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -43,7 +41,7 @@ public class TestPropertiesTest {
         assertTrue(testProperties.isEmpty());
 
         final TestProperties testPropertiesFull = new TestProperties(CUSTOM_TEST_PROPERTIES);
-        
+
         assertFalse(testPropertiesFull.isEmpty());
         assertEquals("1", testPropertiesFull.getProperty("test"));
     }
