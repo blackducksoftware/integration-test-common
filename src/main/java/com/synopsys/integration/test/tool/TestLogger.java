@@ -30,8 +30,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.blackducksoftware.integration.log.IntLogger;
-import com.blackducksoftware.integration.log.LogLevel;
+import com.synopsys.integration.log.IntLogger;
+import com.synopsys.integration.log.LogLevel;
 
 public class TestLogger extends IntLogger {
     public static final int DEFAULT_LOG_SIZE = 1000;
