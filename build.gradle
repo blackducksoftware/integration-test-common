@@ -1,16 +1,46 @@
+import java.time.Duration
+import java.net.URI
+
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
-        maven { url 'https://plugins.gradle.org/m2/' }
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
     }
 
-    dependencies { classpath 'com.blackducksoftware.integration:common-gradle-plugin:0.0.+' }
+    // dependencies { classpath 'com.blackducksoftware.integration:common-gradle-plugin:0.0.+' }
 }
 
+plugins {
+    id 'java-library'
+    id 'groovy'
+    id 'maven-publish'
+    id 'signing'
+    id 'eclipse'
+    id 'com.jfrog.artifactory' version '4.9.3'
+    id 'com.github.hierynomus.license' version '0.14.0'
+    id 'io.codearte.nexus-staging' version '0.21.1'
+    id 'de.marcphilipp.nexus-publish' version '0.4.0'
+}
+
+tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+tasks.withType(GroovyCompile) { options.encoding = 'UTF-8' }
+
+group = 'com.blackducksoftware.integration'
 version = '4.0.7-SNAPSHOT'
 
-apply plugin: 'com.blackducksoftware.integration.library'
+//apply plugin: 'com.blackducksoftware.integration.library'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    maven { url "${project.ext.downloadArtifactoryUrl}/${project.ext.artifactoryReleaseRepo}" }
+    mavenCentral()
+    maven { url 'https://plugins.gradle.org/m2/' }
+}
 
 dependencies {
     compile 'com.blackducksoftware.integration:integration-common:14.0.0'
@@ -20,3 +50,128 @@ dependencies {
     testCompile 'org.slf4j:slf4j-api:1.7.25'
     testCompile 'org.skyscreamer:jsonassert:1.5.0'
 }
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
+license {
+    headerURI = new URI('https://blackducksoftware.github.io/integration-resources/project/HEADER.txt')
+    ext.year = Calendar.getInstance().get(Calendar.YEAR)
+    ext.projectName = project.name
+    ignoreFailures = true
+    includes(['**/*.groovy', '**/*.java'])
+    excludes(['/src/test/*.groovy',
+              'src/test/*.java'])
+}
+
+nexusStaging {
+    packageGroup = 'com.blackducksoftware'
+    stagingProfileId = '324d855ef1398'
+    username = sonatypeUsername
+    password = sonatypePassword
+}
+
+nexusPublishing {
+    repositories {
+        sonatype()
+        connectTimeout = Duration.ofMinutes(5)
+        clientTimeout = Duration.ofMinutes(5)
+    }
+}
+
+publishToSonatype.onlyIf {
+    !project.version.endsWith('-SNAPSHOT')
+}
+
+closeRepository.onlyIf {
+    !project.version.endsWith('-SNAPSHOT')
+}
+
+releaseRepository.onlyIf {
+    !project.version.endsWith('-SNAPSHOT')
+}
+
+project.publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = project.rootProject.name
+            from project.components.java
+            artifact project.sourcesJar
+            artifact project.javadocJar
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = project.rootProject.name
+                description = project.rootProject.description
+                url = "https://www.github.com/blackducksoftware/${project.rootProject.name}"
+                licenses {
+                    license {
+                        name = 'Apache License 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'blackduckoss'
+                        name = 'Black Duck OSS'
+                        email = 'bdsoss@blackducksoftware.com'
+                        organization = 'Black Duck Software, Inc.'
+                        organizationUrl = 'http://www.blackducksoftware.com'
+                        timezone = 'America/New_York'
+                    }
+                }
+                scm {
+                    connection = "scm:git:git://github.com/blackducksoftware/${project.rootProject.name}.git"
+                    developerConnection = "scm:git:git@github.com:blackducksoftware/${project.rootProject.name}.git"
+                    url = "https://www.github.com/blackducksoftware/${project.rootProject.name}"
+                }
+            }
+        }
+    }
+}
+
+publish.dependsOn { println "publish will attempt uploading ${project.name}:${project.version} to maven central" }
+
+signing {
+    required { gradle.taskGraph.hasTask('publish') }
+    sign publishing.publications.mavenJava
+}
+
+def artifactoryRepo = artifactorySnapshotRepo
+if (!project.version.endsWith('-SNAPSHOT')) {
+    artifactoryRepo = artifactoryReleaseRepo
+}
+
+println "outside:" + deployArtifactoryUrl
+artifactory {
+    println "inside:" + deployArtifactoryUrl
+    contextUrl = deployArtifactoryUrl
+    publish {
+        repository {
+            repoKey = artifactoryRepo
+            username = artifactoryDeployerUsername
+            password = artifactoryDeployerPassword
+        }
+        defaults { publications('mavenJava') }
+    }
+    resolve {
+        repository {
+            repoKey = artifactoryReleaseRepo
+        }
+    }
+}
+
+artifactoryPublish.dependsOn { println "artifactoryPublish will attempt uploading ${project.name}:${project.version} to ${deployArtifactoryUrl}/${artifactoryRepo}" }
