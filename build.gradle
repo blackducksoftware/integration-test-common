@@ -29,6 +29,7 @@ tasks.withType(GroovyCompile) { options.encoding = 'UTF-8' }
 
 group = 'com.blackducksoftware.integration'
 version = '4.0.7-SNAPSHOT'
+description = 'A library used for testing integrations.'
 
 //apply plugin: 'com.blackducksoftware.integration.library'
 
@@ -98,10 +99,10 @@ releaseRepository.onlyIf {
     !project.version.endsWith('-SNAPSHOT')
 }
 
-project.publishing {
+publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = project.rootProject.name
+            artifactId = rootProject.name
             from project.components.java
             artifact project.sourcesJar
             artifact project.javadocJar
@@ -114,9 +115,9 @@ project.publishing {
                 }
             }
             pom {
-                name = project.rootProject.name
-                description = project.rootProject.description
-                url = "https://www.github.com/blackducksoftware/${project.rootProject.name}"
+                name = rootProject.name
+                description = rootProject.description
+                url = "https://www.github.com/blackducksoftware/${rootProject.name}"
                 licenses {
                     license {
                         name = 'Apache License 2.0'
@@ -134,9 +135,9 @@ project.publishing {
                     }
                 }
                 scm {
-                    connection = "scm:git:git://github.com/blackducksoftware/${project.rootProject.name}.git"
-                    developerConnection = "scm:git:git@github.com:blackducksoftware/${project.rootProject.name}.git"
-                    url = "https://www.github.com/blackducksoftware/${project.rootProject.name}"
+                    connection = "scm:git:git://github.com/blackducksoftware/${rootProject.name}.git"
+                    developerConnection = "scm:git:git@github.com:blackducksoftware/${rootProject.name}.git"
+                    url = "https://www.github.com/blackducksoftware/${rootProject.name}"
                 }
             }
         }
