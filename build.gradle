@@ -29,7 +29,7 @@ tasks.withType(GroovyCompile) { options.encoding = 'UTF-8' }
 
 group = 'com.blackducksoftware.integration'
 
-version = '4.0.8'
+version = '4.0.9-SNAPSHOT'
 description = 'A library used for testing integrations.'
 
 //apply plugin: 'com.blackducksoftware.integration.library'
